@@ -21,7 +21,7 @@
 	<properties>
 		<java.version>17</java.version>
  	    <sonar.organization>azadeh12113</sonar.organization>
- 		<sonar.projectKey>azadeh12113</sonar.projectKey>
+ 		<sonar.projectKey>azadeh12113_check</sonar.projectKey>
 	    <sonar.host.url>https://sonarcloud.io</sonar.host.url>
 	<sonar.coverage.exclusions>
         **/model/**,
