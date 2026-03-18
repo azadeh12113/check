@@ -20,7 +20,10 @@
 
 	<properties>
 		<java.version>17</java.version>
-		<sonar.coverage.exclusions>
+ 	    <sonar.organization>azadeh12113</sonar.organization>
+ 		<sonar.projectKey>azadeh12113</sonar.projectKey>
+	    <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+	<sonar.coverage.exclusions>
         **/model/**,
         **/config/**,
         **/*Application.java,
