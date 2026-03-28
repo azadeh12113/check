@@ -1,0 +1,13 @@
+com\example\artwork\dto\ScoreRequest.class
+com\example\artwork\ArtWorkApplication.class
+com\example\artwork\model\Judge.class
+com\example\artwork\service\ArtistService.class
+com\example\artwork\client\ScoringClient.class
+com\example\artwork\controller\ArtistRestController.class
+com\example\artwork\config\E2eDataLoader.class
+com\example\artwork\repository\JudgeRepository.class
+com\example\artwork\config\ScoringProperties.class
+com\example\artwork\controller\ArtistController.class
+com\example\artwork\repository\ArtistRepository.class
+com\example\artwork\config\RestConfig.class
+com\example\artwork\model\Artist.class

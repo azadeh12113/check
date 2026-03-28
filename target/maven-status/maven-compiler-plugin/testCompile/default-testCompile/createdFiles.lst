@@ -1,0 +1,12 @@
+com\example\artwork\controller\ArtistWebControllerTest.class
+com\example\artwork\controller\ArtistControllerTest.class
+com\example\artwork\service\ArtistServiceTest.class
+com\example\artwork\controller\ArtistWebControllerHtmlUnitTest.class
+com\example\artwork\controller\ArtistRestControllerRestAssuredTest.class
+com\example\artwork\repository\JudgeRepositoryTest.class
+com\example\artwork\integration\ScoreIntegrationIT.class
+com\example\artwork\integration\ArtistServiceRepositoryIT.class
+com\example\artwork\integration\webcontroller\ArtistWebControllerIT.class
+com\example\artwork\repository\ArtistRepositoryTest.class
+com\example\artwork\integration\controller\ArtistRestControllerIT.class
+com\example\artwork\e2e\ArtWorkE2ETestCase.class
