@@ -2,6 +2,9 @@ package com.example.artwork.service;
 
 import org.springframework.stereotype.Service;
 
+import com.example.artwork.client.ScoringClient;
+import com.example.artwork.config.ScoringProperties;
+import com.example.artwork.dto.ScoreRequest;
 import com.example.artwork.repository.ArtistRepository;
 import com.example.artwork.repository.JudgeRepository;
 import com.example.artwork.model.Artist;
@@ -12,13 +15,19 @@ import java.util.List;
 @Service
 public class ArtistService {
 
-    private ArtistRepository artistRepository;
-    private JudgeRepository judgeRepository;  
+    private final ArtistRepository artistRepository;
+    private final JudgeRepository judgeRepository;
+    private final ScoringClient scoringClient;
+    private final ScoringProperties scoringProperties;
 
-    
-    public ArtistService(ArtistRepository artistRepository, JudgeRepository judgeRepository) {
+    public ArtistService(ArtistRepository artistRepository,
+                         JudgeRepository judgeRepository,
+                         ScoringClient scoringClient,
+                         ScoringProperties scoringProperties) {
         this.artistRepository = artistRepository;
         this.judgeRepository = judgeRepository;
+        this.scoringClient = scoringClient;
+        this.scoringProperties = scoringProperties;
     }
 
     public Artist createArtist(Artist artist) {
@@ -43,7 +52,13 @@ public class ArtistService {
 	    Artist artist = artistRepository.findById(id)
 	        .orElseThrow(() -> new RuntimeException("Artist not found"));
 	    artist.setScore(newScore);
-	    return artistRepository.save(artist);
+	    Artist updated = artistRepository.save(artist);
+
+	    if (scoringProperties.getBaseUrl() != null && !scoringProperties.getBaseUrl().isBlank()) {
+	        scoringClient.submitScore(new ScoreRequest(updated.getId(), newScore));
+	    }
+
+	    return updated;
 	}
     
 	public List<Artist> getArtistsByJudge(Judge judge) {
@@ -66,10 +81,10 @@ public class ArtistService {
 	}
 	
 	public void deleteArtistById(long id) {
-		
-		artistRepository.findById(id)
-		.orElseThrow(()-> new RuntimeException("Artist Not found"));
-		artistRepository.deleteById(id);
+		Artist artist = artistRepository.findById(id)
+			.orElseThrow(() -> new RuntimeException("Artist Not found"));
+	
+		artistRepository.deleteById(artist.getId());
 	}
 	
 }

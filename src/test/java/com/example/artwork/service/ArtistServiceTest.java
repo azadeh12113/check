@@ -1,5 +1,8 @@
 package com.example.artwork.service;
 
+import com.example.artwork.client.ScoringClient;
+import com.example.artwork.config.ScoringProperties;
+import com.example.artwork.dto.ScoreRequest;
 import com.example.artwork.repository.ArtistRepository;
 import com.example.artwork.repository.JudgeRepository;
 import com.example.artwork.model.Artist;
@@ -12,6 +15,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.verifyNoInteractions;
 
 import java.util.List;
 import static java.util.Arrays.asList;
@@ -28,11 +32,23 @@ import org.mockito.junit.MockitoJUnitRunner;
 @RunWith(MockitoJUnitRunner.class)
 public class ArtistServiceTest {
 
+    @org.junit.Before
+    public void setUp() {
+        when(scoringProperties.getBaseUrl()).thenReturn("");
+    }
+
+
     @Mock
     private ArtistRepository artistRepository;
 
     @Mock
     private JudgeRepository judgeRepository;
+
+    @Mock
+    private ScoringClient scoringClient;
+
+    @Mock
+    private ScoringProperties scoringProperties;
 
     @InjectMocks
     private ArtistService artistService;
@@ -215,6 +231,58 @@ public class ArtistServiceTest {
         verify(artistRepository, never()).save(any(Artist.class));
     }
 
+
+    @Test
+    public void test_updateArtistScore_submitsToScoringClient_whenBaseUrlConfigured() {
+
+        long artistId = 1L;
+        int newScore = 3;
+
+        Judge judge = new Judge();
+        judge.setId(1L);
+        judge.setName("name");
+
+        Artist existingArtist = new Artist("Azadeh", "Painting", 1, judge);
+        existingArtist.setId(artistId);
+
+        Artist savedArtist = new Artist("Azadeh", "Painting", newScore, judge);
+        savedArtist.setId(artistId);
+
+        when(scoringProperties.getBaseUrl()).thenReturn("http://localhost:8089");
+        when(artistRepository.findById(artistId)).thenReturn(Optional.of(existingArtist));
+        when(artistRepository.save(any(Artist.class))).thenReturn(savedArtist);
+
+        Artist result = artistService.updateArtistScore(artistId, newScore);
+
+        assertEquals(Integer.valueOf(newScore), result.getScore());
+        verify(scoringClient).submitScore(any(ScoreRequest.class));
+    }
+
+    @Test
+    public void test_updateArtistScore_doesNotSubmitToScoringClient_whenBaseUrlBlank() {
+
+        long artistId = 1L;
+        int newScore = 2;
+
+        Judge judge = new Judge();
+        judge.setId(1L);
+        judge.setName("name");
+
+        Artist existingArtist = new Artist("Azadeh", "Painting", 1, judge);
+        existingArtist.setId(artistId);
+
+        Artist savedArtist = new Artist("Azadeh", "Painting", newScore, judge);
+        savedArtist.setId(artistId);
+
+        when(scoringProperties.getBaseUrl()).thenReturn("");
+        when(artistRepository.findById(artistId)).thenReturn(Optional.of(existingArtist));
+        when(artistRepository.save(any(Artist.class))).thenReturn(savedArtist);
+
+        artistService.updateArtistScore(artistId, newScore);
+
+        verifyNoInteractions(scoringClient);
+    }
+
     @Test
     public void test_getAllArtists_byJudge() {
     	
@@ -364,7 +432,33 @@ public class ArtistServiceTest {
        verify(artistRepository).findById(artistId);
        verify(artistRepository, never()).deleteById(anyLong());
    }
-
+   @Test
+   public void test_updateArtistScore_doesNotSubmitToScoringClient_whenBaseUrlNull() {
+   
+       long artistId = 1L;
+       int newScore = 2;
+   
+       Judge judge = new Judge();
+       judge.setId(1L);
+       judge.setName("name");
+   
+       Artist existingArtist = new Artist("Azadeh", "Painting", 1, judge);
+       existingArtist.setId(artistId);
+   
+       Artist savedArtist = new Artist("Azadeh", "Painting", newScore, judge);
+       savedArtist.setId(artistId);
+   
+       when(scoringProperties.getBaseUrl()).thenReturn(null);
+       when(artistRepository.findById(artistId)).thenReturn(Optional.of(existingArtist));
+       when(artistRepository.save(any(Artist.class))).thenReturn(savedArtist);
+   
+       Artist result = artistService.updateArtistScore(artistId, newScore);
+   
+       assertEquals(Integer.valueOf(newScore), result.getScore());
+       verify(artistRepository).findById(artistId);
+       verify(artistRepository).save(any(Artist.class));
+       verifyNoInteractions(scoringClient);
+   }
  }
 
     

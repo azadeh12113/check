@@ -1,5 +1,8 @@
 package com.example.artwork.integration;
 
+import com.example.artwork.client.ScoringClient;
+import com.example.artwork.config.RestConfig;
+import com.example.artwork.config.ScoringProperties;
 import com.example.artwork.service.ArtistService;
 import com.example.artwork.repository.ArtistRepository;
 import com.example.artwork.repository.JudgeRepository;
@@ -17,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
-@Import(ArtistService.class)
+@Import({ArtistService.class, ScoringClient.class, ScoringProperties.class, RestConfig.class})
 public class ArtistServiceRepositoryIT {
 
     @Autowired
