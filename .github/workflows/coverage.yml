@@ -1,10 +1,10 @@
 name: Java CI with Maven and coverage
-
 on:
   push:
-    branches: [ my-project ] 
+    branches: [ main ] 
   pull_request:
-    branches: [ my-project ]
+    branches: [ main ]
+
 jobs:
   build:
     runs-on: ${{ matrix.os }}
