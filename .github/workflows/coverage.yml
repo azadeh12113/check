@@ -2,7 +2,6 @@ name: Java CI with Maven and coverage
 
 on:
   push:
-    branches: [ master ]
   pull_request:
 
 jobs:
