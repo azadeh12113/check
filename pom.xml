@@ -27,10 +27,11 @@
 <sonar.coverage.exclusions> **/model/**, **/config/**, **/*Application.java, **/Main.java, **/client/ScoringClient.java, **/config/ScoringProperties.java, **/dto/ScoreRequest.java, **/src/it/**,
 		**/src/e2e/**, **/integration/** </sonar.coverage.exclusions>
 	<sonar.exclusions>
-    **/src/it/**,
-    **/src/e2e/**,
+    **/integration/ScoreIntegrationIT.java,
+    **/integration/controller/ArtistRestControllerIT.java,
+    **/integration/webcontroller/ArtistWebControllerIT.java,
     **/*IT.java,
-    **/*E2E*.java
+    **/*E2ETestCase.java
 </sonar.exclusions>
 </properties>
 <dependencyManagement>
