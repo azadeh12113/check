@@ -1,0 +1,37 @@
+name: Java CI with Maven and coverage
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        java: [8, 11]
+        include:
+          - os: ubuntu-latest
+            java: 8
+            additional-maven-args: "-Pjacoco -DrepoToken=$COVERALLS_REPO_TOKEN coveralls:report"
+          - os: ubuntu-latest
+            java: 11
+            additional-maven-args: "-Pjacoco"
+
+    name: Build with Java ${{ matrix.java }} on ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up JDK ${{ matrix.java }}
+        uses: actions/setup-java@v1
+        with:
+          java-version: ${{ matrix.java }}
+
+      - name: Build with Maven
+        run: >
+          mvn clean verify ${{ matrix.additional-maven-args }}
+        env:
+          COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_TOKEN }}
