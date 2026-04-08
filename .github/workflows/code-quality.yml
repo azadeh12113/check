@@ -6,8 +6,9 @@ on:
     - main
     - my-project
   pull_request:
-    branches: [ main ]
-
+    branches: 
+    - main
+    - my-project
 
 
 jobs:
