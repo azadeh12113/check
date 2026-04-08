@@ -24,7 +24,7 @@
 		<httpclient5.version>5.4.1</httpclient5.version>
 		<httpcore5.version>5.3.1</httpcore5.version>
  	    <sonar.organization>azadeh12113</sonar.organization>
- 		<sonar.projectKey>azadeh12113</sonar.projectKey>
+ 		<sonar.projectKey>azadeh12113_check</sonar.projectKey>
 	    <sonar.host.url>https://sonarcloud.io</sonar.host.url>
 	<sonar.coverage.exclusions>
         **/model/**,
