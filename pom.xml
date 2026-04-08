@@ -33,7 +33,9 @@
         **/Main.java,
 		**/client/ScoringClient.java,
     **/config/ScoringProperties.java,
-    **/dto/ScoreRequest.java
+    **/dto/ScoreRequest.java,
+		  src/it/**,
+  src/e2e/**
     </sonar.coverage.exclusions>
 	</properties>
 
