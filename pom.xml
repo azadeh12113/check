@@ -30,7 +30,9 @@
         **/model/**,
         **/config/**,
         **/*Application.java,
-        **/Main.java
+        **/Main.java,
+		  src/it/**,
+  src/e2e/**
     </sonar.coverage.exclusions>
 	</properties>
 
