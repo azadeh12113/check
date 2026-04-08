@@ -2,7 +2,9 @@ name: Code Quality with SonarCloud
 
 on:
   push:
-    branches: [ main ] 
+    branches: 
+    - main
+    - my-project
   pull_request:
     branches: [ main ]
 
