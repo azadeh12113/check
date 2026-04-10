@@ -79,7 +79,7 @@ import com.example.artwork.service.ArtistService;
 		}
 
 		@Test
-		public void testUpdateScoreArtist() throws Exception {
+		public void testUpdateScoreArtist() {
 			
 			 Artist requestBodyArtist = new Artist();
 			    requestBodyArtist.setName("Azadeh");
