@@ -59,13 +59,13 @@ public class ArtistRepositoryTest {
 	    public void testFindByScoreGreaterThan() {
 	    	
 	        Judge judge = entityManager.persistFlushFind(new Judge("Judge1"));
-	        Artist Artist1 = entityManager.persistFlushFind(new Artist("Azadeh", "painting", 3, judge));
-	        Artist Artist2 = entityManager.persistFlushFind(new Artist("Sara", "sculpture", 3, judge));
+	        Artist artist1 = entityManager.persistFlushFind(new Artist("Azadeh", "painting", 3, judge));
+	        Artist artist2 = entityManager.persistFlushFind(new Artist("Sara", "sculpture", 3, judge));
 	        entityManager.persistFlushFind(new Artist("Mina", "photo", 2, judge));
 	        
 	        List<Artist> results = artistRepository.findByScoreGreaterThan(2);
 
-	        assertThat(results).containsExactly(Artist1,Artist2);
+	        assertThat(results).containsExactly(artist1,artist2);
 	    }
 
 	    
