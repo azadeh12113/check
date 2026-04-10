@@ -49,7 +49,7 @@ import com.example.artwork.service.ArtistService;
 		}
 		
 		@Test
-		public void testPostArtist() throws Exception {
+		public void testPostArtist() {
 			
 		    Artist requestBodyArtist = new Artist();
 		    requestBodyArtist.setName("Azadeh");
