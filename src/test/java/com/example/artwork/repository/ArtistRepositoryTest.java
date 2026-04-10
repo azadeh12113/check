@@ -51,8 +51,7 @@ public class ArtistRepositoryTest {
 
 	        LoggerFactory
 	        .getLogger(ArtistRepositoryTest.class)
-	        .info("Saved: " + savedArtist.toString());
-
+			.info("Saved: {}", savedArtist);
 	    }
 
 	    @Test
