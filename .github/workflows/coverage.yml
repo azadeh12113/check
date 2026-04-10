@@ -11,14 +11,12 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        java: [8, 11]
+        java: 8
         include:
           - os: ubuntu-latest
             java: 8
             additional-maven-args: "-Pjacoco -DrepoToken=$COVERALLS_REPO_TOKEN coveralls:report"
-          - os: ubuntu-latest
-            java: 11
-            additional-maven-args: "-Pjacoco"
+
 
     name: Build with Java ${{ matrix.java }} on ${{ matrix.os }}
 
