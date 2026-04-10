@@ -234,6 +234,7 @@
 <exclude>**/Main.*</exclude>
 <exclude>com/example/artwork/config/*</exclude>
 <exclude>com/example/artwork/client/ScoringClient*</exclude>
+<exclude>com/example/artwork/dto/ScoreRequest.java</exclude>
 </excludes>
 </configuration>
 <executions>
