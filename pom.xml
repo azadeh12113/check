@@ -233,6 +233,7 @@
 <exclude>**/*Application.*</exclude>
 <exclude>**/Main.*</exclude>
 <exclude>com/example/artwork/config/*</exclude>
+<exclude>com/example/artwork/client/ScoringClient*</exclude>
 </excludes>
 </configuration>
 <executions>
