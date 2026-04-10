@@ -31,7 +31,7 @@ import static org.hamcrest.Matchers.is;
 public class ArtistControllerTest {
 
     @Autowired
-    private MockMvc mockMvc;;
+    private MockMvc mockMvc;
 
     @MockBean
     private ArtistService artistService;
