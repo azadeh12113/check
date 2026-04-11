@@ -7,22 +7,14 @@ on:
 jobs:
   e2e:
     runs-on: ubuntu-latest
-
-    services:
-      mysql:
-        image: mysql:8.0
-        env:
-          MYSQL_ROOT_PASSWORD: root
-          MYSQL_DATABASE: artwork
-          MYSQL_USER: artwork
-          MYSQL_PASSWORD: artwork
-        ports:
-          - 3306:3306
-        options: >-
-          --health-cmd="mysqladmin ping -h 127.0.0.1 -proot"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=20
+    env:
+      E2E_DB_URL: ${{ secrets.E2E_DB_URL }}
+      E2E_DB_USER: ${{ secrets.E2E_DB_USER }}
+      E2E_DB_PASS: ${{ secrets.E2E_DB_PASS }}
+      MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
+      MYSQL_USER: ${{ secrets.MYSQL_USER }}
+      MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
+      MYSQL_DATABASE: ${{ secrets.MYSQL_DATABASE }}
 
     steps:
       - uses: actions/checkout@v4
@@ -35,4 +27,4 @@ jobs:
           cache: maven
 
       - name: Build with Maven
-        run: xvfb-run mvn -B -Pe2e-tests verify -Dskip.mysql.wait=true
+        run: xvfb-run mvn -B -Pe2e-tests verify
