@@ -36,17 +36,24 @@ jobs:
       - name: Allow Docker to stabilize
         run: sleep 20
 
-      - name: Show Docker containers
-        run: docker ps -a
-
-      - name: Show MySQL logs (before run)
-        run: docker logs $(docker ps -aq --filter "name=mysql") || true
+      - name: Show Docker containers (before run)
+        run: docker ps -a || true
 
       - name: Run E2E tests
+        id: e2e_run
+        continue-on-error: true
         run: xvfb-run mvn -B -Pe2e-tests verify -e -DforkCount=1 -DreuseForks=false
 
       - name: Debug MySQL container
-        if: failure()
+        if: always()
         run: |
-          docker ps -a
+          echo "=== docker ps -a ==="
+          docker ps -a || true
+          echo "=== inspect mysql-e2e ==="
+          docker inspect mysql-e2e || true
+          echo "=== mysql-e2e logs ==="
           docker logs mysql-e2e || true
+
+      - name: Fail job if E2E failed
+        if: steps.e2e_run.outcome != 'success'
+        run: exit 1
