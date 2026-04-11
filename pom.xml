@@ -507,7 +507,7 @@
 <ports>
 <port>3307:3306</port>
 </ports>
-<autoRemove>true</autoRemove>
+<autoRemove>false</autoRemove>
 </run>
 </image>
 </images>
