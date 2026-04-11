@@ -7,7 +7,7 @@ on:
 jobs:
   e2e:
     runs-on: ubuntu-latest
-    environment: E2E_DB
+    environment: E2E_DB   
 
     env:
       E2E_DB_URL: ${{ secrets.E2E_DB_URL }}
@@ -28,5 +28,12 @@ jobs:
           java-version: '17'
           cache: maven
 
-      - name: Build with Maven
+      - name: Check env presence
+        run: |
+          test -n "$MYSQL_ROOT_PASSWORD" && echo "MYSQL_ROOT_PASSWORD set" || (echo "MYSQL_ROOT_PASSWORD missing" && exit 1)
+          test -n "$MYSQL_DATABASE" && echo "MYSQL_DATABASE set" || (echo "MYSQL_DATABASE missing" && exit 1)
+          test -n "$E2E_DB_URL" && echo "E2E_DB_URL set" || (echo "E2E_DB_URL missing" && exit 1)
+
+     
+      - name: Run E2E tests
         run: xvfb-run mvn -B -Pe2e-tests verify -e
