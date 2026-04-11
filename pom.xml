@@ -548,7 +548,6 @@
 </configuration>
 </execution>
 <execution>
-<execution>
   <id>reset-e2e-database</id>
   <phase>pre-integration-test</phase>
   <goals>
