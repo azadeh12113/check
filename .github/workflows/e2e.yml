@@ -41,7 +41,6 @@ jobs:
 
       - name: Show MySQL logs
         run: docker logs $(docker ps -aq --filter "name=mysql") || true
-
-      # ✅ Run tests with lower resource usage (prevents exit 137)
+        
       - name: Run E2E tests
         run: xvfb-run mvn -B -Pe2e-tests verify -e -DforkCount=1 -DreuseForks=false
