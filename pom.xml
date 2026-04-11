@@ -537,32 +537,36 @@
 <configuration>
 <executable>docker</executable>
 <arguments>
-<argument>exec</argument>
-<argument>mysql-e2e</argument>
-<argument>bash</argument>
-<argument>-c</argument>
-<argument>until mysqladmin ping -h127.0.0.1 -uroot -p${env.MYSQL_ROOT_PASSWORD} --silent; do echo waiting_for_mysql; sleep 2; done</argument>
+      <argument>exec</argument>
+      <argument>-e</argument>
+      <argument>MYSQL_PWD=${env.MYSQL_ROOT_PASSWORD}</argument>
+      <argument>mysql-e2e</argument>
+      <argument>sh</argument>
+      <argument>-c</argument>
+      <argument>for i in $(seq 1 60); do mysqladmin ping -h127.0.0.1 -uroot --silent &amp;&amp; exit 0; echo waiting_for_mysql; sleep 5; done; exit 1</argument>
 </arguments>
 </configuration>
 </execution>
 <execution>
-<id>reset-e2e-database</id>
-<phase>pre-integration-test</phase>
-<goals>
-<goal>exec</goal>
-</goals>
-<configuration>
-<executable>docker</executable>
-<arguments>
-<argument>exec</argument>
-<argument>mysql-e2e</argument>
-<argument>mysql</argument>
-<argument>-uroot</argument>
-<argument>-p${env.MYSQL_ROOT_PASSWORD}</argument>
-<argument>-e</argument>
-<argument>DROP DATABASE IF EXISTS artworkdb_e2e; CREATE DATABASE artworkdb_e2e;</argument>
-</arguments>
-</configuration>
+<execution>
+  <id>reset-e2e-database</id>
+  <phase>pre-integration-test</phase>
+  <goals>
+    <goal>exec</goal>
+  </goals>
+  <configuration>
+    <executable>docker</executable>
+    <arguments>
+      <argument>exec</argument>
+      <argument>-e</argument>
+      <argument>MYSQL_PWD=${env.MYSQL_ROOT_PASSWORD}</argument>
+      <argument>mysql-e2e</argument>
+      <argument>mysql</argument>
+      <argument>-uroot</argument>
+      <argument>-e</argument>
+      <argument>DROP DATABASE IF EXISTS artworkdb_e2e; CREATE DATABASE artworkdb_e2e;</argument>
+    </arguments>
+  </configuration>
 </execution>
 <execution>
 <id>cleanup-mysql-container</id>
