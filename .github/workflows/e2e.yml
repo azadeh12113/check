@@ -31,27 +31,43 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up JDK 17
-        uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: '17'
-          cache: maven
+      - name: Show env presence
+        run: |
+          test -n "$MYSQL_ROOT_PASSWORD" && echo "MYSQL_ROOT_PASSWORD set" || (echo "MYSQL_ROOT_PASSWORD missing" && exit 1)
+          test -n "$MYSQL_USER" && echo "MYSQL_USER set" || (echo "MYSQL_USER missing" && exit 1)
+          test -n "$MYSQL_PASSWORD" && echo "MYSQL_PASSWORD set" || (echo "MYSQL_PASSWORD missing" && exit 1)
+          test -n "$MYSQL_DATABASE" && echo "MYSQL_DATABASE set" || (echo "MYSQL_DATABASE missing" && exit 1)
+
+      - name: Show Docker containers
+        run: docker ps -a
+
+      - name: Show MySQL logs
+        run: docker logs $(docker ps -aq --filter "ancestor=mysql:8.0") || true
 
       - name: Install mysql client
         run: sudo apt-get update && sudo apt-get install -y mysql-client
 
-      - name: Wait for MySQL
+      - name: Wait for MySQL with root
         run: |
-          for i in {1..30}; do
-            if mysqladmin ping -h 127.0.0.1 -P 3307 -u"$MYSQL_USER" -p"$MYSQL_PASSWORD" --silent; then
+          for i in {1..60}; do
+            if mysqladmin ping --protocol=tcp -h 127.0.0.1 -P 3307 -uroot -p"$MYSQL_ROOT_PASSWORD" --silent; then
               echo "MySQL is ready"
               exit 0
             fi
             echo "Waiting for MySQL..."
             sleep 2
           done
+          echo "MySQL did not become ready"
+          docker ps -a
+          docker logs $(docker ps -aq --filter "ancestor=mysql:8.0") || true
           exit 1
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: maven
 
       - name: Build with Maven
         run: xvfb-run mvn -B -Pe2e-tests verify -e
