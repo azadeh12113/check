@@ -33,5 +33,15 @@ jobs:
           test -n "$MYSQL_DATABASE" && echo "MYSQL_DATABASE set" || (echo "MYSQL_DATABASE missing" && exit 1)
           test -n "$E2E_DB_URL" && echo "E2E_DB_URL set" || (echo "E2E_DB_URL missing" && exit 1)
 
+      - name: Allow Docker to stabilize
+        run: sleep 20
+
+      - name: Show Docker containers
+        run: docker ps -a
+
+      - name: Show MySQL logs
+        run: docker logs $(docker ps -aq --filter "name=mysql") || true
+
+      # ✅ Run tests with lower resource usage (prevents exit 137)
       - name: Run E2E tests
-        run: xvfb-run mvn -B -Pe2e-tests verify -e
+        run: xvfb-run mvn -B -Pe2e-tests verify -e -DforkCount=1 -DreuseForks=false
