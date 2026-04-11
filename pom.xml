@@ -233,8 +233,6 @@
 <exclude>**/*Application.*</exclude>
 <exclude>**/Main.*</exclude>
 <exclude>com/example/artwork/config/*</exclude>
-<exclude>com/example/artwork/client/ScoringClient*</exclude>
-<exclude>com/example/artwork/dto/ScoreRequest*</exclude>
 </excludes>
 </configuration>
 <executions>
@@ -260,6 +258,18 @@
 <plugin>
 <artifactId>maven-site-plugin</artifactId>
 <version>3.9.1</version>
+</plugin>
+<plugin>
+<groupId>org.eluder.coveralls</groupId>
+<artifactId>coveralls-maven-plugin</artifactId>
+<version>4.3.0</version>
+<dependencies>
+<dependency>
+<groupId>javax.xml.bind</groupId>
+<artifactId>jaxb-api</artifactId>
+<version>2.3.1</version>
+</dependency>
+</dependencies>
 </plugin>
 <!--  PIT removed   -->
 </plugins>
@@ -501,13 +511,13 @@
 <run>
 <namingStrategy>alias</namingStrategy>
 <env>
-<MYSQL_ROOT_PASSWORD>${env.MYSQL_ROOT_PASSWORD}</MYSQL_ROOT_PASSWORD>
-<MYSQL_DATABASE>${env.MYSQL_DATABASE}</MYSQL_DATABASE>
+<MYSQL_ROOT_PASSWORD>${MYSQL_ROOT_PASSWORD}</MYSQL_ROOT_PASSWORD>
+<MYSQL_DATABASE>${MYSQL_DATABASE}</MYSQL_DATABASE>
 </env>
 <ports>
 <port>3307:3306</port>
 </ports>
-<autoRemove>false</autoRemove>
+<autoRemove>true</autoRemove>
 </run>
 </image>
 </images>
@@ -537,35 +547,32 @@
 <configuration>
 <executable>docker</executable>
 <arguments>
-      <argument>exec</argument>
-      <argument>-e</argument>
-      <argument>MYSQL_PWD=${env.MYSQL_ROOT_PASSWORD}</argument>
-      <argument>mysql-e2e</argument>
-      <argument>sh</argument>
-      <argument>-c</argument>
-      <argument>for i in $(seq 1 60); do mysqladmin ping -h127.0.0.1 -uroot --silent &amp;&amp; exit 0; echo waiting_for_mysql; sleep 5; done; exit 1</argument>
+<argument>exec</argument>
+<argument>mysql-e2e</argument>
+<argument>bash</argument>
+<argument>-c</argument>
+<argument>until mysqladmin ping -h127.0.0.1 -uroot -p${env.MYSQL_ROOT_PASSWORD} --silent; do echo waiting_for_mysql; sleep 2; done</argument>
 </arguments>
 </configuration>
 </execution>
 <execution>
-  <id>reset-e2e-database</id>
-  <phase>pre-integration-test</phase>
-  <goals>
-    <goal>exec</goal>
-  </goals>
-  <configuration>
-    <executable>docker</executable>
-    <arguments>
-      <argument>exec</argument>
-      <argument>-e</argument>
-      <argument>MYSQL_PWD=${env.MYSQL_ROOT_PASSWORD}</argument>
-      <argument>mysql-e2e</argument>
-      <argument>mysql</argument>
-      <argument>-uroot</argument>
-      <argument>-e</argument>
-      <argument>DROP DATABASE IF EXISTS artworkdb_e2e; CREATE DATABASE artworkdb_e2e;</argument>
-    </arguments>
-  </configuration>
+<id>reset-e2e-database</id>
+<phase>pre-integration-test</phase>
+<goals>
+<goal>exec</goal>
+</goals>
+<configuration>
+<executable>docker</executable>
+<arguments>
+<argument>exec</argument>
+<argument>mysql-e2e</argument>
+<argument>mysql</argument>
+<argument>-uroot</argument>
+<argument>-p${env.MYSQL_ROOT_PASSWORD}</argument>
+<argument>-e</argument>
+<argument>DROP DATABASE IF EXISTS artworkdb_e2e; CREATE DATABASE artworkdb_e2e;</argument>
+</arguments>
+</configuration>
 </execution>
 <execution>
 <id>cleanup-mysql-container</id>
