@@ -9,22 +9,22 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      E2E_DB_URL: ${{ secrets.E2E_DB_URL }}
-      E2E_DB_USER: ${{ secrets.E2E_DB_USER }}
-      E2E_DB_PASS: ${{ secrets.E2E_DB_PASS }}
-      MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
-      MYSQL_USER: ${{ secrets.MYSQL_USER }}
-      MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
-      MYSQL_DATABASE: ${{ secrets.MYSQL_DATABASE }}
+      E2E_DB_URL: ${{ vars.E2E_DB_URL }}
+      E2E_DB_USER: ${{ vars.E2E_DB_USER }}
+      E2E_DB_PASS: ${{ vars.E2E_DB_PASS }}
+      MYSQL_ROOT_PASSWORD: ${{ vars.MYSQL_ROOT_PASSWORD }}
+      MYSQL_USER: ${{ vars.MYSQL_USER }}
+      MYSQL_PASSWORD: ${{ vars.MYSQL_PASSWORD }}
+      MYSQL_DATABASE: ${{ vars.MYSQL_DATABASE }}
 
     services:
       mysql:
         image: mysql:8.0
         env:
-          MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
-          MYSQL_USER: ${{ secrets.MYSQL_USER }}
-          MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
-          MYSQL_DATABASE: ${{ secrets.MYSQL_DATABASE }}
+          MYSQL_ROOT_PASSWORD: ${{ vars.MYSQL_ROOT_PASSWORD }}
+          MYSQL_USER: ${{ vars.MYSQL_USER }}
+          MYSQL_PASSWORD: ${{ vars.MYSQL_PASSWORD }}
+          MYSQL_DATABASE: ${{ vars.MYSQL_DATABASE }}
         ports:
           - 3307:3306
 
@@ -38,17 +38,19 @@ jobs:
           java-version: '17'
           cache: maven
 
+      - name: Install mysql client
+        run: sudo apt-get update && sudo apt-get install -y mysql-client
+
       - name: Wait for MySQL
         run: |
           for i in {1..30}; do
-            if mysqladmin ping -h 127.0.0.1 -P 3307 -u"${MYSQL_USER}" -p"${MYSQL_PASSWORD}" --silent; then
+            if mysqladmin ping -h 127.0.0.1 -P 3307 -u"$MYSQL_USER" -p"$MYSQL_PASSWORD" --silent; then
               echo "MySQL is ready"
               exit 0
             fi
             echo "Waiting for MySQL..."
             sleep 2
           done
-          echo "MySQL did not become ready in time"
           exit 1
 
       - name: Build with Maven
