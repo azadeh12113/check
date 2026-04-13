@@ -350,6 +350,8 @@
 <param>com.example.artwork.config.*</param>
 <param>com.example.artwork.*Application</param>
 <param>com.example.artwork.Main</param>
+<param>com.example.artwork.dto.*</param>
+<param>com.example.artwork.client.*</param>
 </excludedClasses>
 <excludedTestClasses>
 <param>*IT</param>
