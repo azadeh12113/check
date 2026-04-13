@@ -649,5 +649,65 @@
 </plugins>
 </build>
 </profile>
+	<profile>
+    <id>pit</id>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.pitest</groupId>
+                <artifactId>pitest-maven</artifactId>
+                <version>1.15.8</version>
+                <configuration>
+                    <timeoutConstant>8000</timeoutConstant>
+                    <timeoutFactor>2.0</timeoutFactor>
+                    <threads>1</threads>
+
+                    <targetClasses>
+                        <param>com.example.artwork.service.*</param>
+                        <param>com.example.artwork.repository.*</param>
+                        <param>com.example.artwork.controller.*</param>
+                    </targetClasses>
+
+                    <targetTests>
+                        <param>com.example.artwork.service.*Test</param>
+                        <param>com.example.artwork.repository.*Test</param>
+                        <param>com.example.artwork.controller.*Test</param>
+                    </targetTests>
+
+                    <excludedClasses>
+                        <param>com.example.artwork.model.*</param>
+                        <param>com.example.artwork.config.*</param>
+                        <param>com.example.artwork.*Application</param>
+                        <param>com.example.artwork.Main</param>
+                        <param>com.example.artwork.dto.*</param>
+                        <param>com.example.artwork.client.*</param>
+                        <param>com.example.artwork.client.ScoringClient</param>
+                        <param>com.example.artwork.dto.ScoreRequest</param>
+                    </excludedClasses>
+
+                    <excludedTestClasses>
+                        <param>*IT</param>
+                        <param>*E2E</param>
+                        <param>com.example.artwork.e2e.*</param>
+                    </excludedTestClasses>
+
+                    <excludedMethods>
+                        <param>get*</param>
+                        <param>set*</param>
+                        <param>toString</param>
+                        <param>equals</param>
+                        <param>hashCode</param>
+                    </excludedMethods>
+
+                    <mutators>
+                        <mutator>DEFAULTS</mutator>
+                    </mutators>
+
+                    <mutationThreshold>80</mutationThreshold>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</profile>
 </profiles>
 </project>
