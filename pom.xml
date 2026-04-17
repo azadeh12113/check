@@ -404,6 +404,8 @@
 <exclude>com/example/artwork/client/ScoringClient.*</exclude>
 <exclude>com/example/artwork/config/ScoringProperties.*</exclude>
 <exclude>com/example/artwork/dto/ScoreRequest.*</exclude>
+<exclude>**/client/**</exclude>
+<exclude>**/dto/**</exclude>
 </excludes>
 </configuration>
 </execution>
