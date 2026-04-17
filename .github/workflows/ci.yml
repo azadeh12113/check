@@ -30,6 +30,4 @@ jobs:
         run: ls -l target/site/jacoco/jacoco.xml
 
       - name: Print paths from JaCoCo
-        run: |
-          grep -i "ScoringClient" target/site/jacoco/jacoco.xml || true
-          grep -i "ScoreRequest" target/site/jacoco/jacoco.xml || true
+        run: grep -Ei "ScoringClient|ScoreRequest" target/site/jacoco/jacoco.xml || true
