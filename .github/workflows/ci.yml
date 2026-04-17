@@ -22,14 +22,14 @@ jobs:
           cache: maven
 
       - name: Build, generate JaCoCo, and upload to Coveralls
-        run: mvn clean verify -Pjacoco -DrepoToken=$COVERALLS_REPO_TOKEN coveralls:report
+        run: mvn clean verify -Pjacoco coveralls:report -DrepoToken=${COVERALLS_REPO_TOKEN}
         env:
           COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_TOKEN }}
 
       - name: Check JaCoCo report exists
         run: ls -l target/site/jacoco/jacoco.xml
 
-      - name: Print paths from JaCoCo
+      - name: Verify excluded classes are not in JaCoCo
         run: |
-          grep -i "ScoringClient" target/site/jacoco/jacoco.xml || true
-          grep -i "ScoreRequest" target/site/jacoco/jacoco.xml || true
+          ! grep -i "com/example/artwork/client/ScoringClient" target/site/jacoco/jacoco.xml
+          ! grep -i "com/example/artwork/dto/ScoreRequest" target/site/jacoco/jacoco.xml
