@@ -1,8 +1,10 @@
 name: Java CI with Maven for PR
 
 on:
+  push:
+    branches: [ main ]
   pull_request:
-
+    branches: [ main ]
 jobs:
   build:
     runs-on: ${{ matrix.os }}
