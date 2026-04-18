@@ -385,40 +385,8 @@
                 </plugin>
 <!--  JaCoCo (coverage)  -->
 <plugin>
-<groupId>org.jacoco</groupId>
-<artifactId>jacoco-maven-plugin</artifactId>
-<executions>
-<execution>
-<id>prepare-agent</id>
-<goals>
-<goal>prepare-agent</goal>
-</goals>
-<configuration>
-<excludes>
-<exclude>**/model/*</exclude>
-<exclude>**/*Application*</exclude>
-<exclude>**/Main*</exclude>
-<exclude>com/example/artwork/config/*</exclude>
-<!--  HtmlUnit (very large generated initializers)  -->
-<exclude>com/gargoylesoftware/htmlunit/**</exclude>
-<exclude>org/htmlunit/**</exclude>
-<!--  WireMock / scoring  -->
-<exclude>com/example/artwork/client/ScoringClient.*</exclude>
-<exclude>com/example/artwork/config/ScoringProperties.*</exclude>
-<exclude>com/example/artwork/dto/ScoreRequest.*</exclude>
-<exclude>**/client/**</exclude>
-<exclude>**/dto/**</exclude>
-</excludes>
-</configuration>
-</execution>
-<execution>
-<id>report</id>
-<phase>verify</phase>
-<goals>
-<goal>report</goal>
-</goals>
-</execution>
-</executions>
+  <groupId>org.jacoco</groupId>
+  <artifactId>jacoco-maven-plugin</artifactId>
 </plugin>
 </plugins>
 </build>
